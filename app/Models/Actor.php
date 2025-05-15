@@ -40,7 +40,7 @@ class Actor extends Model
 
 	public function films()
 	{
-		return $this->belongsToMany(Film::class, 'film_actor')
+		return $this->belongsToMany(Film::class, 'film_actor', 'actor_id', 'film_id')
 					->withPivot('last_update');
 	}
 }

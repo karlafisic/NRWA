@@ -11,6 +11,7 @@
             <tr>
                 <th>Title</th>
                 <th>Language</th>
+                <th>Categories</th>
                 <th>Release Year</th>
                 <th>Rental Rate</th>
                 <th>Actions</th>
@@ -21,6 +22,11 @@
                 <tr>
                     <td>{{ $film->title }}</td>
                     <td>{{ $film->language->name }}</td>
+                    <td>
+                        @foreach($film->categories as $category)
+                            <span class="badge bg-secondary">{{ $category->name }}</span>
+                        @endforeach
+                    </td>
                     <td>{{ $film->release_year }}</td>
                     <td>{{ $film->rental_rate }}</td>
                     <td>

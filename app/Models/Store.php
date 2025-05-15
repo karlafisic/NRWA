@@ -45,12 +45,17 @@ class Store extends Model
 
 	public function address()
 	{
-		return $this->belongsTo(Address::class);
+		return $this->belongsTo(Address::class, 'address_id');
 	}
 
-	public function staff()
+	public function manager()
 	{
-		return $this->hasMany(Staff::class);
+		return $this->belongsTo(Staff::class, 'manager_staff_id');
+	}
+
+	public function staffMembers()
+	{
+		return $this->hasMany(Staff::class, 'store_id');
 	}
 
 	public function customers()
@@ -60,6 +65,6 @@ class Store extends Model
 
 	public function inventories()
 	{
-		return $this->hasMany(Inventory::class);
+		return $this->hasMany(Inventory::class, 'store_id');
 	}
 }

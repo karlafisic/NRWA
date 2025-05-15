@@ -60,6 +60,19 @@
             <label for="special_features" class="form-label">Special Features:</label>
             <textarea id="special_features" name="special_features" class="form-control"></textarea>
         </div>
+        {{-- Dodano: Odabir više kategorija --}}
+        <div class="mb-3">
+            <label class="form-label">Categories:</label>
+            @foreach($categories as $category)
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="categories[]" value="{{ $category->category_id }}" id="category{{ $category->category_id }}">
+                    <label class="form-check-label" for="category{{ $category->category_id }}">
+                    {{ $category->name }}
+                    </label>
+                </div>
+            @endforeach
+        </div>
+
 
         <button type="submit" class="btn btn-success">Add Film</button>
         <a href="{{ route('films.index') }}" class="btn btn-secondary ms-2">Back to Films</a>

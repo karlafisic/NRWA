@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Film;
 use App\Models\Language;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -26,7 +27,9 @@ class FilmController extends Controller
     {
         //
         $languages = Language::all();
-        return view('films.create', compact('languages'));
+        $categories = Category::all(); 
+
+        return view('films.create', compact('languages', 'categories'));
     }
 
     /**
@@ -45,8 +48,10 @@ class FilmController extends Controller
             'replacement_cost' => 'required|numeric',
             'rating' => 'nullable|string|max:255',
             'special_features' => 'nullable|string|max:255',
+            'categories' => 'required|array',
+            'categories.*' => 'exists:category,category_id'
         ]);
-        Film::create([
+        $film = Film::create([
             'title' => $request->title,
             'description' => $request->description,
             'release_year' => $request->release_year,
@@ -58,8 +63,13 @@ class FilmController extends Controller
             'replacement_cost' => $request->replacement_cost,
             'rating' => $request->rating,
             'special_features' => $request->special_features,
-            'last_update' => now(), // Dodajemo timestamp
+            'last_update' => now(), 
         ]);
+        if ($film) {
+            $film->categories()->sync($request->categories);
+        } else {
+            return redirect()->back()->with('error', 'Film could not be created.');
+        }
 
         return redirect('/films')->with('success', 'Film created successfully.');
 
@@ -68,10 +78,45 @@ class FilmController extends Controller
     /**
      * Display the specified resource.
      */
+    /**
+ * Display the specified resource.
+ */
     public function show(string $id)
     {
-        //
+        $film = Film::with(['language', 'originalLanguage', 'categories'])
+                ->findOrFail($id);
+        
+        return view('films.show', compact('film'));
     }
+
+    public function dohvati(string $id)
+    {
+        $film = Film::with(['language', 'originalLanguage', 'categories'])
+                    ->findOrFail($id);
+
+        return response()->json([
+            'status' => 'success',
+            'data' => [
+                'id' => $film->id,
+                'title' => $film->title,
+                'description' => $film->description,
+                'release_year' => $film->release_year,
+                'language' => $film->language,
+                'original_language' => $film->originalLanguage,
+                'rental_duration' => $film->rental_duration,
+                'rental_rate' => $film->rental_rate,
+                'length' => $film->length,
+                'replacement_cost' => $film->replacement_cost,
+                'rating' => $film->rating,
+                'special_features' => $film->special_features,
+                'last_update' => $film->last_update,
+                'categories' => $film->categories
+            ]
+        ], 200, [], JSON_PRETTY_PRINT);
+    }
+
+
+    
 
     /**
      * Show the form for editing the specified resource.
@@ -81,9 +126,11 @@ class FilmController extends Controller
         //
         $film = Film::findOrFail($id);
         $languages = Language::all(); // Lista jezika za dropdown u formi
+        $categories = Category::all();
+
     
         // Prikazivanje forme za uređivanje s podacima filma
-        return view('films.edit', compact('film', 'languages'));
+        return view('films.edit', compact('film', 'languages', 'categories'));
     }
 
     /**
@@ -104,6 +151,8 @@ class FilmController extends Controller
         'replacement_cost' => 'required|numeric',
         'rating' => 'nullable|string|max:5',
         'special_features' => 'nullable|string',
+        'categories' => 'required|array',
+        'categories.*' => 'exists:category,category_id'
     ]);
 
     // Pronađite film prema ID-u
@@ -124,6 +173,11 @@ class FilmController extends Controller
         'special_features' => $request->special_features,
         'last_update' => Carbon::now(),  // postavite datum zadnje izmjene
     ]);
+    if ($film) {
+        $film->categories()->sync($request->categories);
+    } else {
+        return redirect()->back()->with('error', 'Film could not be created.');
+    }
 
     // Redirektanje na index stranicu s porukom o uspješnom ažuriranju
     return redirect('/films')->with('success', 'Film updated successfully.');

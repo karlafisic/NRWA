@@ -69,16 +69,21 @@ class Staff extends Model
 
 	public function store()
 	{
+    return $this->belongsTo(Store::class, 'store_id');
+	}
+
+	public function managedStore()
+	{
 		return $this->hasOne(Store::class, 'manager_staff_id');
 	}
 
 	public function payments()
 	{
-		return $this->hasMany(Payment::class);
+		return $this->hasMany(Payment::class, 'payment_id');
 	}
 
 	public function rentals()
 	{
-		return $this->hasMany(Rental::class);
+		return $this->hasMany(Rental::class, 'staff_id');
 	}
 }

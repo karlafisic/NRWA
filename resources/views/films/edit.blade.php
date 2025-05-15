@@ -76,6 +76,26 @@
             <label for="special_features" class="form-label">Special Features:</label>
             <textarea id="special_features" name="special_features" class="form-control">{{ $film->special_features }}</textarea>
         </div>
+        
+        <div class="mb-3">
+            <label class="form-label">Categories:</label>
+            @foreach($categories as $category)
+                <div class="form-check">
+                    <input 
+                        class="form-check-input" 
+                        type="checkbox" 
+                        name="categories[]" 
+                        value="{{ $category->category_id }}" 
+                        id="category{{ $category->category_id }}"
+                        @if($film->categories->contains('category_id', $category->category_id)) checked @endif
+                    >
+                    <label class="form-check-label" for="category{{ $category->category_id }}">
+                        {{ $category->name }}
+                    </label>
+                </div>
+            @endforeach
+        </div>
+
 
         <button type="submit" class="btn btn-primary">Update Film</button>
         <a href="{{ route('films.index') }}" class="btn btn-secondary ms-2">Back to Films</a>

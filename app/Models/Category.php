@@ -38,7 +38,7 @@ class Category extends Model
 
 	public function films()
 	{
-		return $this->belongsToMany(Film::class, 'film_category')
+		return $this->belongsToMany(Film::class, 'film_category', 'category_id', 'film_id')
 					->withPivot('last_update');
 	}
 }

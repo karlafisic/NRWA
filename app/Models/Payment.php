@@ -52,16 +52,16 @@ class Payment extends Model
 
 	public function customer()
 	{
-		return $this->belongsTo(Customer::class);
+		return $this->belongsTo(Customer::class, 'customer_id');
 	}
 
 	public function rental()
 	{
-		return $this->belongsTo(Rental::class);
+		return $this->belongsTo(Rental::class, 'rental_id');
 	}
 
 	public function staff()
 	{
-		return $this->belongsTo(Staff::class);
+		return $this->belongsTo(Staff::class, 'staff_id');
 	}
 }

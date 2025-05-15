@@ -57,21 +57,21 @@ class Customer extends Model
 
 	public function address()
 	{
-		return $this->belongsTo(Address::class);
+		return $this->belongsTo(Address::class, 'address_id');
 	}
 
 	public function store()
 	{
-		return $this->belongsTo(Store::class);
+		return $this->belongsTo(Store::class, 'store_id');
 	}
 
 	public function payments()
 	{
-		return $this->hasMany(Payment::class);
+		return $this->hasMany(Payment::class, 'customer_id');
 	}
 
 	public function rentals()
 	{
-		return $this->hasMany(Rental::class);
+		return $this->hasMany(Rental::class, 'customer_id');
 	}
 }

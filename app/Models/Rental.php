@@ -54,21 +54,21 @@ class Rental extends Model
 
 	public function customer()
 	{
-		return $this->belongsTo(Customer::class);
+		return $this->belongsTo(Customer::class, 'customer_id');
 	}
 
 	public function inventory()
 	{
-		return $this->belongsTo(Inventory::class);
+		return $this->belongsTo(Inventory::class, 'inventory_id');
 	}
 
 	public function staff()
 	{
-		return $this->belongsTo(Staff::class);
+		return $this->belongsTo(Staff::class, 'staff_id');
 	}
 
 	public function payments()
 	{
-		return $this->hasMany(Payment::class);
+		return $this->hasMany(Payment::class, 'rental_id');
 	}
 }
