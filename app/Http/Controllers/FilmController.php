@@ -190,6 +190,7 @@ class FilmController extends Controller
     {
         //
         $film = Film::findOrFail($id);
+        $film->categories()->detach();
 
     // Brisanje filma
         $film->delete();
