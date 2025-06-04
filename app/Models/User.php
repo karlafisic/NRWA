@@ -41,6 +41,7 @@ class User extends Authenticatable
         'password',
         'remember_token',
         'role_id',
+        'google_id',
     ];
 
     public function role()

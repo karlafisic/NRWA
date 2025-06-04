@@ -1,5 +1,6 @@
 <?php
 
+
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\FilmController;
@@ -15,20 +16,37 @@ use App\Http\Controllers\RentalController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\GoogleController;
+use Laravel\Socialite\Facades\Socialite;
+
 
 // Početna stranica
 Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/home', function () {
+    return view('home');
+});
 // Autentikacija
 Auth::routes();
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class,'login']);
 
+
+
+Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
+Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
+
+
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+
+
+
 Route::get('/cities', [CityController::class, 'index'])->name('cities.index');
-Route::get('/stores', [CityController::class, 'index'])->name('stores.index');
+Route::get('/stores', [StoreController::class, 'index'])->name('stores.index');
 
 
     
@@ -53,7 +71,7 @@ Route::middleware(['auth', 'role:admin,user,editor'])->group(function () {
 });
 
 // Rute za role editor i admin — stvaranje i uređivanje
-Route::middleware(['auth', 'role:editor'])->group(function () {
+Route::middleware(['auth', 'role:admin,editor'])->group(function () {
     // Categories
     Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
     Route::post('/categories/store', [CategoryController::class, 'store'])->name('categories.store');
@@ -161,3 +179,5 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::patch('/payments/{id}', [PaymentController::class, 'update'])->name('payments.update');
     Route::delete('/payments/{id}', [PaymentController::class, 'destroy'])->name('payments.destroy');
 });
+
+

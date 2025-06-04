@@ -27,5 +27,18 @@ class LoginController extends Controller
             'email' => 'Pogrešni podaci za prijavu.',
         ]);
     }
+    
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/login');
+    }
+
+
 }
 

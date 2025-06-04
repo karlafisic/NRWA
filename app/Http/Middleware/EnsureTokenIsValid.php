@@ -17,7 +17,7 @@ class EnsureTokenIsValid
         $user = Auth::user();
 
         if (!$user) {
-            return redirect('/');
+            return redirect('/home');
         }
 
         foreach ($roles as $role) {
@@ -26,6 +26,6 @@ class EnsureTokenIsValid
             }
         }
 
-        return redirect('/');
+        return redirect('/home');
     }
 }

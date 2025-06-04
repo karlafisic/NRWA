@@ -15,6 +15,7 @@
                     @endif
 
                     {{ __('You are logged in!') }}
+                    {{ __('Nemate dopuštenje za kreiranje, uređivanje ili brisanje.') }}
                 </div>
             </div>
         </div>
